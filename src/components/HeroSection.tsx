@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 import ChatboxDemo from './ChatboxDemo';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
@@ -21,9 +22,15 @@ const HeroSection = () => {
               Experience seamless interactions with our advanced AI assistant. Get answers, generate content, analyze documents, and solve problems with just a chat.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20">
-                <MessageCircle className="h-5 w-5" />
-                Start Chatting
+              <Button 
+                size="lg" 
+                className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20"
+                asChild
+              >
+                <Link to="/chat">
+                  <MessageCircle className="h-5 w-5" />
+                  Start Chatting
+                </Link>
               </Button>
               <Button variant="outline" size="lg" className="group">
                 Learn More

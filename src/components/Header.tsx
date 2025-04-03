@@ -11,27 +11,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const isMobile = useIsMobile();
 
   const navItems = [
-    { name: 'Features', href: '#features' },
-    { name: 'Solutions', href: '#solutions' },
-    { name: 'Enterprise', href: '#enterprise' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Solutions', href: '/#solutions' },
+    { name: 'Enterprise', href: '/#enterprise' },
+    { name: 'Pricing', href: '/#pricing' },
+    { name: 'Testimonials', href: '/#testimonials' },
   ];
 
   const Logo = () => (
-    <div className="flex items-center gap-2">
+    <Link to="/" className="flex items-center gap-2">
       <img 
-        src="/lovable-uploads/9a9011cd-baa7-4f4a-b26d-efc8cfdc4b6f.png" 
+        src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
         alt="CyberGen" 
         className="h-10 w-auto"
       />
       <span className="font-bold text-xl">AURA</span>
-    </div>
+    </Link>
   );
 
   const NavItems = () => (
@@ -69,9 +70,11 @@ const Header = () => {
               {item.name}
             </a>
           ))}
-          <Button className="mt-4 bg-cybergen-primary hover:bg-cybergen-secondary">
-            Sign In
-          </Button>
+          <Link to="/chat">
+            <Button className="mt-4 bg-cybergen-primary hover:bg-cybergen-secondary w-full">
+              Sign In
+            </Button>
+          </Link>
         </div>
       </SheetContent>
     </Sheet>
@@ -85,9 +88,11 @@ const Header = () => {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           {!isMobile && (
-            <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
-              Sign In
-            </Button>
+            <Link to="/chat">
+              <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
+                Sign In
+              </Button>
+            </Link>
           )}
           <MobileNav />
         </div>
