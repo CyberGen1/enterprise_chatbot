@@ -115,7 +115,7 @@ const ChatAssistantButton = () => {
       {/* Fixed floating close button that's always visible when chat is open */}
       {isOpen && (
         <div 
-          className="fixed bottom-6 right-6 z-[10000] md:bottom-auto md:top-6 md:right-6"
+          className="fixed top-6 right-6 z-[10000] hidden md:block"
           style={{ transform: 'translateZ(0)' }}
         >
           <button
