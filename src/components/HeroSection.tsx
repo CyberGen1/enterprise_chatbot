@@ -1,11 +1,28 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import ChatboxDemo from './ChatboxDemo';
 import { Link } from 'react-router-dom';
 
+// Create a context to manage the chat assistant state globally
+export const ChatAssistantContext = React.createContext<{
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  isOpen: false,
+  setIsOpen: () => {},
+});
+
+export const useChatAssistant = () => React.useContext(ChatAssistantContext);
+
 const HeroSection = () => {
+  const { setIsOpen } = useChatAssistant();
+
+  const handleStartChatting = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsOpen(true);
+  };
+
   return (
     <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background elements */}
@@ -25,12 +42,10 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20"
-                asChild
+                onClick={handleStartChatting}
               >
-                <Link to="/chat">
-                  <MessageSquare className="h-5 w-5" />
-                  Start Chatting
-                </Link>
+                <MessageSquare className="h-5 w-5" />
+                Start Chatting
               </Button>
               <Button variant="outline" size="lg" className="group">
                 Learn More
