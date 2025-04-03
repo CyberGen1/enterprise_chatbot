@@ -31,7 +31,7 @@ const Header = () => {
         alt="CyberGen" 
         className="h-10 w-auto"
       />
-      <span className="font-bold text-xl">AURA</span>
+      <span className="font-bold text-xl">CYBERGEN</span>
     </Link>
   );
 
