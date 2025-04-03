@@ -1,56 +1,66 @@
-
 import React from 'react';
 import { Check, X, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button'; // Assuming Button is correctly imported
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'; // Using more specific Card components
+import { Badge } from '@/components/ui/badge'; // Assuming Badge is correctly imported
+
+// Define your theme colors (replace with your actual theme variables if possible)
+// If these are defined in your tailwind.config.js, you don't need these variables here.
+// const CYBERGEN_PRIMARY = '#YOUR_PRIMARY_COLOR'; // e.g., 'hsl(var(--primary))'
+// const CYBERGEN_SECONDARY = '#YOUR_SECONDARY_COLOR'; // e.g., 'hsl(var(--secondary))'
 
 const PricingSection = () => {
   const plans = [
     {
+      id: 'starter',
       name: 'Starter',
       price: 29,
+      priceSuffix: '/month',
       description: 'Perfect for individuals and small teams just getting started.',
       features: [
         { included: true, name: 'Basic document analysis' },
-        { included: true, name: 'Up to 100 documents' },
-        { included: true, name: '2GB storage limit' },
-        { included: true, name: 'Standard support' },
+        { included: true, name: 'Up to 100 documents/month' }, // Added clarity
+        { included: true, name: '2 GB cloud storage' },       // Added clarity
+        { included: true, name: 'Standard email support' },   // Added clarity
         { included: false, name: 'API access' },
-        { included: false, name: 'Custom training' },
+        { included: false, name: 'Custom model training' },  // Refined wording
         { included: false, name: 'On-premise deployment' },
       ],
       cta: 'Get Started',
       popular: false,
     },
     {
+      id: 'professional',
       name: 'Professional',
       price: 99,
-      description: 'For growing teams that need more power and additional features.',
+      priceSuffix: '/month',
+      description: 'For growing teams that need more power and features.',
       features: [
         { included: true, name: 'Advanced document analysis' },
-        { included: true, name: 'Up to 1,000 documents' },
-        { included: true, name: '10GB storage limit' },
-        { included: true, name: 'Priority support' },
-        { included: true, name: 'API access' },
-        { included: true, name: 'Basic training' },
+        { included: true, name: 'Up to 1,000 documents/month' },
+        { included: true, name: '10 GB cloud storage' },
+        { included: true, name: 'Priority email & chat support' }, // Added clarity
+        { included: true, name: 'API access (Rate limited)' },      // Added clarity
+        { included: true, name: 'Basic model training' },
         { included: false, name: 'On-premise deployment' },
       ],
-      cta: 'Get Started',
+      cta: 'Choose Professional', // More specific CTA
       popular: true,
     },
     {
+      id: 'enterprise',
       name: 'Enterprise',
       price: 'Custom',
-      description: 'For organizations that need advanced features and dedicated support.',
+      priceSuffix: '', // No suffix for custom
+      description: 'Tailored solutions for large organizations with specific needs.',
       features: [
-        { included: true, name: 'Full document intelligence' },
+        { included: true, name: 'Full document intelligence suite' }, // Refined wording
         { included: true, name: 'Unlimited documents' },
-        { included: true, name: 'Unlimited storage' },
-        { included: true, name: '24/7 dedicated support' },
-        { included: true, name: 'Full API access' },
-        { included: true, name: 'Custom training' },
-        { included: true, name: 'On-premise deployment' },
+        { included: true, name: 'Unlimited cloud storage' },
+        { included: true, name: '24/7 Dedicated support & SLA' }, // Added clarity
+        { included: true, name: 'Full API access & higher limits' }, // Added clarity
+        { included: true, name: 'Advanced custom model training' }, // Refined wording
+        { included: true, name: 'On-premise or private cloud deployment' }, // Refined wording
       ],
       cta: 'Contact Sales',
       popular: false,
@@ -58,76 +68,86 @@ const PricingSection = () => {
   ];
 
   return (
-    <section id="pricing" className="section-container bg-muted/50">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Simple, <span className="gradient-text">Transparent Pricing</span>
+    <section id="pricing" className="py-16 md:py-24 bg-muted/30"> {/* Increased padding, slightly lighter bg */}
+      <div className="container mx-auto px-4">
+        {/* Section Header */}
+        <div className="text-center mb-16 md:mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            Simple, Transparent Pricing
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Choose the plan that's right for your team, from startups to enterprise organizations.
+          {/* Removed gradient span for cleaner look, focus on typography */}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Choose the plan that fits your scale. From solo projects to enterprise solutions, we've got you covered.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
-            <Card 
-              key={index} 
-              className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                plan.popular ? 'border-cybergen-primary shadow-lg shadow-cybergen-primary/10' : ''
+        {/* Pricing Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-7xl mx-auto items-stretch"> {/* Changed md breakpoint, increased gap, max-width, align items */}
+          {plans.map((plan) => (
+            <Card
+              key={plan.id}
+              className={`flex flex-col relative overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.02] ${
+                plan.popular ? 'border-2 border-primary shadow-lg shadow-primary/20' : 'border' // Enhanced popular styling, default border for others
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-0 right-0">
-                  <Badge className="rounded-tl-none rounded-br-none px-3 py-1 bg-cybergen-primary text-white">
-                    <Zap className="h-3.5 w-3.5 mr-1" />
-                    Popular
-                  </Badge>
-                </div>
+                <Badge
+                  variant="default" // Use primary color by default
+                  className="absolute top-0 right-0 rounded-none rounded-bl-lg px-4 py-1.5 text-sm font-semibold"
+                >
+                  <Zap className="h-4 w-4 mr-1.5" />
+                  Most Popular
+                </Badge>
               )}
-              
-              <CardHeader className="pb-2">
-                <h3 className="text-xl font-bold">{plan.name}</h3>
-              </CardHeader>
-              
-              <CardContent className="space-y-6">
-                <div>
+
+              <CardHeader className="p-6"> {/* Increased padding */}
+                <CardTitle className="text-2xl font-semibold mb-2">{plan.name}</CardTitle> {/* Larger title */}
+                <div className="flex items-baseline gap-x-2">
                   {typeof plan.price === 'number' ? (
-                    <div className="flex items-baseline">
-                      <span className="text-4xl font-bold">${plan.price}</span>
-                      <span className="text-muted-foreground ml-1">/month</span>
-                    </div>
+                    <>
+                      <span className="text-4xl md:text-5xl font-bold tracking-tight">${plan.price}</span>
+                      <span className="text-muted-foreground">{plan.priceSuffix}</span>
+                    </>
                   ) : (
-                    <div className="text-4xl font-bold">{plan.price}</div>
+                    <span className="text-4xl md:text-5xl font-bold tracking-tight">{plan.price}</span>
                   )}
-                  <p className="text-muted-foreground mt-2">{plan.description}</p>
                 </div>
-                
-                <div className="space-y-3">
+                 <CardDescription className="pt-3 text-base">{plan.description}</CardDescription> {/* Increased top padding */}
+              </CardHeader>
+
+              <CardContent className="flex-grow p-6 space-y-5 border-t"> {/* Added border-t, increased padding + spacing, flex-grow */}
+                <p className="text-sm font-medium text-foreground mb-4">Features include:</p> {/* Added subheading for features */}
+                <ul className="space-y-3 text-sm"> {/* Use ul for semantics */}
                   {plan.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      {feature.included ? (
-                        <Check className="h-5 w-5 text-green-500" />
-                      ) : (
-                        <X className="h-5 w-5 text-muted-foreground" />
-                      )}
-                      <span className={feature.included ? '' : 'text-muted-foreground'}>
+                    <li key={i} className="flex items-start gap-3"> {/* Use li, align items start for long text */}
+                      <div className="flex-shrink-0 w-5 h-5 mt-0.5"> {/* Wrapper for icon alignment */}
+                        {feature.included ? (
+                          <Check className="h-full w-full text-green-500" />
+                        ) : (
+                          <X className="h-full w-full text-muted-foreground/70" /> // Slightly dimmer X
+                        )}
+                      </div>
+                      <span className={feature.included ? 'text-foreground' : 'text-muted-foreground line-through'}> {/* Line-through for excluded */}
                         {feature.name}
                       </span>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </CardContent>
-              
-              <CardFooter>
-                <Button 
-                  className={`w-full ${
-                    plan.popular 
-                      ? 'bg-cybergen-primary hover:bg-cybergen-secondary' 
-                      : plan.name === 'Enterprise' 
-                        ? 'bg-transparent hover:bg-transparent border border-cybergen-primary text-cybergen-primary hover:text-cybergen-secondary hover:border-cybergen-secondary' 
-                        : ''
-                  }`}
+
+              <CardFooter className="p-6 mt-auto border-t"> {/* Added border-t, padding, push to bottom */}
+                <Button
+                  size="lg" // Larger button
+                  className="w-full"
+                  variant={
+                    plan.popular
+                      ? 'default' // Primary button for popular
+                      : plan.id === 'enterprise'
+                        ? 'outline' // Outline button for enterprise
+                        : 'secondary' // Secondary button for starter
+                    }
+                  // Add specific hover styles if needed, e.g., hover:bg-primary/90 for default
+                  // The variants should handle hover states reasonably well by default
                 >
                   {plan.cta}
                 </Button>

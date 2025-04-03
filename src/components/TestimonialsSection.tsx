@@ -101,7 +101,7 @@ const TestimonialsSection = () => {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             {/* Assuming gradient-text class provides styling */}
-            Trusted by <span className="text-primary">Industry Leaders</span>
+            Trusted by <span className="text-cybergen-secondary">Industry Leaders</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
             See what our customers have to say about how CyberGen AURA has transformed their document processes.

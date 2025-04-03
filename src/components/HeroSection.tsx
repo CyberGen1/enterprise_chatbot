@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button'; // Assuming Button is correctly imported
+import { ArrowRight, Sparkles } from 'lucide-react'; // Changed icon for primary CTA
 
-// Create a context to manage the chat assistant state globally
+// --- Context Definition (No style changes needed here) ---
 export const ChatAssistantContext = React.createContext<{
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,6 +13,7 @@ export const ChatAssistantContext = React.createContext<{
 
 export const useChatAssistant = () => React.useContext(ChatAssistantContext);
 
+// --- Hero Section Component ---
 const HeroSection = () => {
   const { setIsOpen } = useChatAssistant();
 
@@ -21,50 +22,83 @@ const HeroSection = () => {
     setIsOpen(true);
   };
 
+  // Assume gradient-text class is defined globally or in your main CSS:
+  // .gradient-text {
+  //   background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary))); /* Adjust colors as needed */
+  //   -webkit-background-clip: text;
+  //   -webkit-text-fill-color: transparent;
+  //   background-clip: text;
+  //   text-fill-color: transparent;
+  // }
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <section className="relative isolate min-h-screen flex items-center overflow-hidden bg-background"> {/* Use bg-background, isolate for stacking */}
+      {/* Subtle Background Elements */}
+      <div
+        className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(theme(colors.muted)_1px,transparent_1px)] [background-size:20px_20px] opacity-30" // Softer dots, theme color
+        aria-hidden="true"
+      />
+      <div
+        className="absolute -top-40 -left-1/4 w-[1200px] h-[1200px] transform-gpu blur-3xl -z-10" // Softer, larger, blurred gradient blob
+        aria-hidden="true"
+      >
+        <div
+          className="aspect-[1155/678] w-full bg-gradient-to-tr from-primary/10 via-primary/5 to-secondary/10 opacity-50" // Use theme colors, adjust opacity
+          style={{
+            clipPath:
+              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)', // Example complex clip-path for shape
+          }}
+        />
       </div>
-      
-      {/* Additional background elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-cybergen-primary/10 to-transparent rounded-full"></div>
-      
-      <div className="container mx-auto px-4 relative z-10 py-20">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight font-sans">
-              <span className="gradient-text font-light">AI-Powered</span> <span className="font-normal">Conversations</span> for <span className="gradient-text font-semibold">Enterprise</span>
+
+
+      <div className="container mx-auto px-6 lg:px-8 relative z-10 py-24 sm:py-32 lg:py-40"> {/* Increased padding */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 lg:gap-24"> {/* Increased gap */}
+          {/* Text Content Area */}
+          <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-8 leading-tight sm:leading-tight lg:leading-tight"> {/* Use foreground color, adjusted margin */}
+              Unlock Insights with
+              <br className="hidden lg:inline" />{' '} {/* Line break on large screens */}
+              <span className="gradient-text">AI-Powered Conversations</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-700 mb-8 max-w-xl mx-auto lg:mx-0 font-light">
-              Experience seamless interactions with our advanced AI assistant. Get answers, generate content, analyze documents, and solve problems with just a chat.
+            <p className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0"> {/* Use muted-foreground, adjusted margin and max-width */}
+              Engage with our cutting-edge AI assistant. Seamlessly analyze data, generate content, and find solutions through intuitive chat.
             </p>
+            {/* Call to Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button 
-                size="lg" 
-                className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20 font-medium"
+              <Button
+                size="lg"
                 onClick={handleStartChatting}
+                className="shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-shadow duration-300" // Use default variant, add refined shadow
               >
-                <MessageSquare className="h-5 w-5" />
-                Start Chatting
+                <Sparkles className="h-5 w-5 mr-2" /> {/* Different Icon */}
+                Try the Assistant
               </Button>
-              <Button variant="outline" size="lg" className="group font-medium">
+              <Button variant="outline" size="lg" className="group">
                 Learn More
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
               </Button>
             </div>
           </div>
-          
-          <div className="flex-1 w-full max-w-xl">
-            <div className="animate-float">
-              {/* AI Chat Illustration */}
-              <img 
-                src="/ai-chat-illustration.jpg" 
-                alt="AI Assistant chatting with a person" 
-                className="w-full h-auto rounded-lg border border-gray-200 shadow-2xl shadow-blue-500/20"
-              />
-            </div>
+
+          {/* Image/Visual Area */}
+          <div className="flex justify-center lg:justify-end w-full max-w-xl mx-auto lg:max-w-none lg:mx-0">
+             {/* Optional: Add subtle animation wrapper */}
+             {/* <div className="animate-subtle-float"> */}
+                <img
+                  src="/ai-chat-illustration.jpg" // Replace with your actual image path
+                  alt="AI Assistant Interface"
+                  className="w-full h-auto rounded-xl shadow-2xl aspect-video object-cover" // Larger radius, neutral shadow, enforce aspect ratio
+                  // Optional: Add loading="lazy" for performance
+                />
+             {/* </div> */}
+             {/* Define animate-subtle-float in your global CSS if needed:
+               @keyframes subtle-float {
+                 0%, 100% { transform: translateY(0); }
+                 50% { transform: translateY(-6px); }
+               }
+               .animate-subtle-float { animation: subtle-float 6s ease-in-out infinite; }
+             */}
           </div>
         </div>
       </div>
