@@ -34,22 +34,22 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10 py-20">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              <span className="gradient-text">AI-Powered</span> Conversations for <span className="gradient-text">Enterprise</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight font-sans">
+              <span className="gradient-text font-light">AI-Powered</span> <span className="font-normal">Conversations</span> for <span className="gradient-text font-semibold">Enterprise</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-700 mb-8 max-w-xl mx-auto lg:mx-0">
+            <p className="text-lg md:text-xl text-slate-700 mb-8 max-w-xl mx-auto lg:mx-0 font-light">
               Experience seamless interactions with our advanced AI assistant. Get answers, generate content, analyze documents, and solve problems with just a chat.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button 
                 size="lg" 
-                className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20"
+                className="bg-cybergen-primary hover:bg-cybergen-secondary text-white flex items-center gap-2 shadow-lg shadow-cybergen-primary/20 font-medium"
                 onClick={handleStartChatting}
               >
                 <MessageSquare className="h-5 w-5" />
                 Start Chatting
               </Button>
-              <Button variant="outline" size="lg" className="group">
+              <Button variant="outline" size="lg" className="group font-medium">
                 Learn More
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -62,7 +62,7 @@ const HeroSection = () => {
               <img 
                 src="/ai-chat-illustration.jpg" 
                 alt="AI Assistant chatting with a person" 
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg border border-gray-200 shadow-2xl shadow-blue-500/20"
               />
             </div>
           </div>

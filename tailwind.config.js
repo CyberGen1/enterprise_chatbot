@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Work Sans', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -24,8 +27,6 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          light: "hsl(var(--primary-light))",
-          dark: "hsl(var(--primary-dark))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -52,6 +53,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "cybergen-primary": "#38bdf8",
+        "cybergen-primary-dark": "#1e40af",
+        "cybergen-secondary": "#0369a1",
         sidebar: {
           background: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -77,6 +81,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
         pulse: {
           '0%, 100%': { opacity: 1 },
           '50%': { opacity: 0.5 },
@@ -89,11 +97,14 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       backgroundImage: {
         'blue-gradient': 'linear-gradient(to bottom, #38bdf8, #1e40af)',
         'blue-gradient-hover': 'linear-gradient(to bottom, #0ea5e9, #1e3a8a)',
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'network-pattern': "url('/network-pattern.png')",
       },
     },
   },
