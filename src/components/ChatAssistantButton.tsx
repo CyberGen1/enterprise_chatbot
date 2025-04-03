@@ -18,7 +18,7 @@ const ChatMessage = ({ type, text }: { type: 'user' | 'bot'; text: string }) => 
         className={cn(
           'max-w-[80%] rounded-lg px-4 py-3 text-sm shadow-sm',
           isUser
-            ? 'bg-primary text-primary-foreground rounded-br-none' // Use primary color
+            ? 'blue-gradient text-white rounded-br-none' // Use blue gradient instead of primary
             : 'bg-muted text-muted-foreground rounded-bl-none'
         )}
       >
@@ -30,9 +30,9 @@ const ChatMessage = ({ type, text }: { type: 'user' | 'bot'; text: string }) => 
 
 // Helper component for Welcome Screen Cards (no changes needed here)
 const WelcomeCard = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
-  <div className="group cursor-pointer rounded-lg border bg-card p-4 text-card-foreground shadow-sm transition-all hover:shadow-md hover:border-primary/50">
+  <div className="group cursor-pointer rounded-lg border bg-card p-4 text-card-foreground shadow-sm transition-all hover:shadow-md hover:border-blue-400/50">
     <div className="mb-3 flex justify-center">
-      <Icon className="h-6 w-6 text-primary transition-transform group-hover:scale-110" />
+      <Icon className="h-6 w-6 text-cybergen-primary transition-transform group-hover:scale-110" />
     </div>
     <h3 className="mb-1 text-center font-semibold text-sm">{title}</h3>
     <p className="text-center text-xs text-muted-foreground">{description}</p>
@@ -162,21 +162,21 @@ const ChatAssistantButton = () => {
             style={{ transformOrigin: 'bottom right' }}
           >
             {/* Header - Close button integrated here */}
-            <CardHeader className="flex flex-row items-center justify-between p-3 border-b bg-muted/40 flex-shrink-0"> {/* Added flex-shrink-0 */}
+            <CardHeader className="flex flex-row items-center justify-between p-3 border-b bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 flex-shrink-0"> {/* Added blue gradient background */}
               <div className="flex items-center gap-2">
-                 <span className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full border items-center justify-center bg-primary"> {/* Use bg-primary */}
-                     <Bot className="h-5 w-5 text-primary-foreground"/> {/* Use primary-foreground */}
+                 <span className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full border items-center justify-center blue-gradient"> {/* Use blue-gradient class */}
+                     <Bot className="h-5 w-5 text-white"/> {/* Use white text on gradient */}
                  </span>
                 <h3 className="font-semibold text-base text-foreground">AI Assistant</h3>
               </div>
               <div className="flex items-center gap-1">
                 {!isMobile && (
-                  <Button variant="ghost" size="icon" onClick={toggleMaximize} className="h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label={isMaximized ? "Restore chat size" : "Maximize chat"}>
+                  <Button variant="ghost" size="icon" onClick={toggleMaximize} className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600" aria-label={isMaximized ? "Restore chat size" : "Maximize chat"}>
                      {isMaximized ? <Minus className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                   </Button>
                 )}
                  {/* --- Close button moved here, always visible when chat is open --- */}
-                 <Button variant="ghost" size="icon" onClick={toggleChat} className="h-7 w-7 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Close chat">
+                 <Button variant="ghost" size="icon" onClick={toggleChat} className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600" aria-label="Close chat">
                     <X className="h-4 w-4" />
                  </Button>
               </div>
@@ -192,8 +192,8 @@ const ChatAssistantButton = () => {
                     transition={{ delay: 0.2, duration: 0.4 }}
                     className="flex flex-col items-center justify-center text-center h-full px-4"
                 >
-                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg"> {/* Use bg-primary */}
-                      <Sparkles className="h-8 w-8 text-primary-foreground" /> {/* Use primary-foreground */}
+                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full blue-gradient shadow-lg"> {/* Use blue-gradient */}
+                      <Sparkles className="h-8 w-8 text-white" /> {/* Use white text */}
                    </div>
                    <h2 className="mb-2 text-xl font-bold text-foreground">How can I help?</h2>
                    <p className="mb-6 max-w-md text-sm text-muted-foreground">
@@ -214,19 +214,19 @@ const ChatAssistantButton = () => {
             </CardContent>
 
             {/* Footer / Input Area */}
-            <CardFooter className="p-3 border-t bg-muted/40 flex-shrink-0"> {/* Added flex-shrink-0 */}
+            <CardFooter className="p-3 border-t bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 flex-shrink-0"> {/* Added blue gradient background */}
                 {useKnowledgeBase && (
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0}}
-                        className="mb-2 text-xs text-primary flex items-center gap-1 justify-center" // Use text-primary
+                        className="mb-2 text-xs text-blue-500 flex items-center gap-1 justify-center" // Use text-blue-500
                     >
                         <Database className="h-3 w-3"/> Knowledge Base Active
                     </motion.div>
                 )}
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary flex-shrink-0" aria-label="Attach file">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-blue-500 flex-shrink-0" aria-label="Attach file">
                   <Paperclip className="h-4 w-4" />
                 </Button>
                 <Button
@@ -234,8 +234,8 @@ const ChatAssistantButton = () => {
                     size="icon"
                     onClick={toggleKnowledgeBase}
                     className={cn(
-                        "h-8 w-8 flex-shrink-0 hover:text-primary", // Use hover:text-primary
-                        useKnowledgeBase ? "text-primary bg-primary/10" : "text-muted-foreground" // Use text-primary when active
+                        "h-8 w-8 flex-shrink-0 hover:text-blue-500", // Use hover:text-blue-500
+                        useKnowledgeBase ? "text-blue-500 bg-blue-100" : "text-muted-foreground" // Use text-blue-500 when active
                     )}
                     aria-label={useKnowledgeBase ? "Deactivate knowledge base" : "Activate knowledge base"}
                     title={useKnowledgeBase ? "Knowledge base active" : "Activate knowledge base"}
@@ -250,7 +250,7 @@ const ChatAssistantButton = () => {
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask anything..."
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10" // Assuming 'ring' uses primary color from config
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10" // Use ring-blue-400
                   />
                 </div>
                  <Button
@@ -267,7 +267,7 @@ const ChatAssistantButton = () => {
                 <Button
                   size="icon"
                   onClick={sendMessage}
-                  className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex-shrink-0 hover:bg-primary/90 disabled:opacity-50" // Use bg-primary, text-primary-foreground
+                  className="h-8 w-8 rounded-full blue-gradient text-white flex-shrink-0 hover:shadow-md disabled:opacity-50" // Use blue-gradient and text-white
                   aria-label="Send message"
                   disabled={message.trim() === ''}
                 >
@@ -291,7 +291,7 @@ const ChatAssistantButton = () => {
         >
           <Button
             onClick={toggleChat}
-            className="h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center transition-transform duration-200 hover:scale-105 hover:shadow-xl hover:bg-primary/90" // Use bg-primary, text-primary-foreground
+            className="h-14 w-14 rounded-full blue-gradient-button shadow-lg flex items-center justify-center" // Use blue-gradient-button
             aria-label="Open chat assistant"
           >
             <MessageSquare className="h-6 w-6" />
