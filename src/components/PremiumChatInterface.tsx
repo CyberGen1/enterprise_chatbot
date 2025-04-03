@@ -23,7 +23,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   Copy,
-  Save
+  Save,
+  Upload
 } from 'lucide-react';
 
 const WelcomeMessage = () => (
