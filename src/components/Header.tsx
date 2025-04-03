@@ -28,10 +28,10 @@ const Header = () => {
     <Link to="/" className="flex items-center gap-2">
       <img 
         src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
-        alt="CyberGen" 
+        alt="Cybergen" 
         className="h-10 w-auto"
       />
-      <span className="font-bold text-xl">AURA</span>
+      <span className="font-bold text-xl">CYBERGEN</span>
     </Link>
   );
 

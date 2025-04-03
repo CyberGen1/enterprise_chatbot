@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Maximize2, X, FileText, BarChart3, Folder, Send } from 'lucide-react';
+import { Maximize2, X, FileText, BarChart3, Folder, Send, MessageSquare } from 'lucide-react';
 
 const ChatboxDemo = () => {
   return (
@@ -29,8 +29,8 @@ const ChatboxDemo = () => {
               <div className="text-center max-w-md">
                 <div className="mx-auto bg-cybergen-light dark:bg-cybergen-primary/10 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                   <img 
-                    src="/lovable-uploads/9a9011cd-baa7-4f4a-b26d-efc8cfdc4b6f.png" 
-                    alt="CyberGen" 
+                    src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
+                    alt="Cybergen" 
                     className="h-10 w-auto"
                   />
                 </div>
@@ -67,7 +67,7 @@ const ChatboxDemo = () => {
                     </p>
                   </div>
                   <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
-                    <Send className="h-4 w-4" />
+                    <MessageSquare className="h-4 w-4" />
                   </Button>
                 </div>
               </TabsContent>
@@ -80,7 +80,7 @@ const ChatboxDemo = () => {
                     </p>
                   </div>
                   <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
-                    <Send className="h-4 w-4" />
+                    <MessageSquare className="h-4 w-4" />
                   </Button>
                 </div>
               </TabsContent>
@@ -93,7 +93,7 @@ const ChatboxDemo = () => {
                     </p>
                   </div>
                   <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
-                    <Send className="h-4 w-4" />
+                    <MessageSquare className="h-4 w-4" />
                   </Button>
                 </div>
               </TabsContent>

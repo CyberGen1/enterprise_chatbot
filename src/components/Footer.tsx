@@ -54,11 +54,11 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <img 
-                src="/lovable-uploads/9a9011cd-baa7-4f4a-b26d-efc8cfdc4b6f.png" 
-                alt="CyberGen" 
+                src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
+                alt="Cybergen" 
                 className="h-8 w-auto"
               />
-              <span className="font-bold text-lg">AURA</span>
+              <span className="font-bold text-lg">CYBERGEN</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               AI-powered document intelligence platform for enterprises. Process, analyze, and extract insights from any document.
@@ -99,7 +99,7 @@ const Footer = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-sm text-muted-foreground">
-            &copy; {year} CyberGen. All rights reserved.
+            &copy; {year} Cybergen. All rights reserved.
           </div>
           <div className="flex gap-6">
             <a href="#" className="text-sm text-muted-foreground hover:text-cybergen-primary transition-colors">

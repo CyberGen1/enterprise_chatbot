@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowRight, MessageSquare } from 'lucide-react';
 import ChatboxDemo from './ChatboxDemo';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ const HeroSection = () => {
                 asChild
               >
                 <Link to="/chat">
-                  <MessageCircle className="h-5 w-5" />
+                  <MessageSquare className="h-5 w-5" />
                   Start Chatting
                 </Link>
               </Button>
