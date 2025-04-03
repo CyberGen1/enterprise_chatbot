@@ -15,14 +15,6 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-            <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
-              <img 
-                src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
-                alt="CyberGen" 
-                className="h-16 w-auto"
-              />
-              <span className="font-bold text-3xl">CYBERGEN</span>
-            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               <span className="gradient-text">AI-Powered</span> Conversations for <span className="gradient-text">Enterprise</span>
             </h1>

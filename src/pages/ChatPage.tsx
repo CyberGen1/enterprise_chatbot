@@ -12,8 +12,10 @@ import {
   Brain, 
   MessageSquare, 
   Settings, 
-  ChevronLeft
+  ChevronLeft,
+  Bot
 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PremiumChatInterface from '@/components/PremiumChatInterface';
 
 const ChatPage = () => {
@@ -31,7 +33,7 @@ const ChatPage = () => {
                 <ChevronLeft className="h-5 w-5" />
               </a>
             </Button>
-            <h1 className="text-2xl font-bold">CYBERGEN Premium</h1>
+            <h1 className="text-2xl font-bold">AURA Premium</h1>
           </div>
           
           <div className="flex flex-col lg:flex-row gap-6">
@@ -45,7 +47,7 @@ const ChatPage = () => {
                       alt="CyberGen" 
                       className="h-8 w-auto"
                     />
-                    <span className="font-bold text-lg">CYBERGEN</span>
+                    <span className="font-bold text-lg">AURA</span>
                   </div>
                 </div>
                 

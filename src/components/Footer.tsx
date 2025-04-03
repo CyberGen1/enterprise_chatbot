@@ -54,11 +54,11 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <img 
-                src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
+                src="/lovable-uploads/9a9011cd-baa7-4f4a-b26d-efc8cfdc4b6f.png" 
                 alt="CyberGen" 
                 className="h-8 w-auto"
               />
-              <span className="font-bold text-lg">CYBERGEN</span>
+              <span className="font-bold text-lg">AURA</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               AI-powered document intelligence platform for enterprises. Process, analyze, and extract insights from any document.
