@@ -88,7 +88,7 @@ const HeroSection = () => {
                 <img
                   src="/ai-chat-illustration.jpg" // Replace with your actual image path
                   alt="AI Assistant Interface"
-                  className="w-full h-auto rounded-xl shadow-2xl aspect-video object-cover" // Larger radius, neutral shadow, enforce aspect ratio
+                  className="w-full h-auto rounded-xl border-blue-500 shadow-2xl shadow-blue-500/20 aspect-video object-cover" // Larger radius, neutral shadow, enforce aspect ratio
                   // Optional: Add loading="lazy" for performance
                 />
              {/* </div> */}

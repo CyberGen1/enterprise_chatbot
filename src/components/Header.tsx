@@ -17,8 +17,6 @@ const Header = () => {
   const isMobile = useIsMobile();
 
   const navItems = [
-    { name: 'Features', href: '/#features' },
-    { name: 'Solutions', href: '/#solutions' },
     { name: 'Enterprise', href: '/#enterprise' },
     { name: 'Pricing', href: '/#pricing' },
     { name: 'Testimonials', href: '/#testimonials' },
