@@ -31,7 +31,7 @@ const Header = () => {
         alt="CyberGen" 
         className="h-10 w-auto"
       />
-      <span className="font-bold text-xl text-gray-800">CYBERGEN</span>
+      <span className="font-bold text-xl">CYBERGEN</span>
     </Link>
   );
 
@@ -41,7 +41,7 @@ const Header = () => {
         <a 
           key={item.name} 
           href={item.href}
-          className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+          className="text-foreground hover:text-cybergen-primary transition-colors font-medium"
         >
           {item.name}
         </a>
@@ -56,22 +56,22 @@ const Header = () => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="bg-white">
+      <SheetContent side="right">
         <SheetHeader>
-          <SheetTitle className="text-gray-800">Menu</SheetTitle>
+          <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-4 mt-6">
           {navItems.map((item) => (
             <a 
               key={item.name} 
               href={item.href}
-              className="text-gray-600 hover:text-gray-900 transition-colors font-medium text-lg py-2"
+              className="text-foreground hover:text-cybergen-primary transition-colors font-medium text-lg py-2"
             >
               {item.name}
             </a>
           ))}
           <Link to="/chat">
-            <Button className="mt-4 bg-gray-800 hover:bg-gray-700 w-full">
+            <Button className="mt-4 bg-cybergen-primary hover:bg-cybergen-secondary w-full">
               Sign In
             </Button>
           </Link>
@@ -81,7 +81,7 @@ const Header = () => {
   );
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-gray-100 shadow-sm">
+    <header className="bg-background/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Logo />
         <NavItems />
@@ -89,7 +89,7 @@ const Header = () => {
           <ThemeToggle />
           {!isMobile && (
             <Link to="/chat">
-              <Button className="bg-gray-800 hover:bg-gray-700 text-white">
+              <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
                 Sign In
               </Button>
             </Link>

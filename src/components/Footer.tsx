@@ -48,7 +48,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-100">
+    <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="md:col-span-2">
@@ -58,9 +58,9 @@ const Footer = () => {
                 alt="CyberGen" 
                 className="h-8 w-auto"
               />
-              <span className="font-bold text-lg text-gray-800">CYBERGEN</span>
+              <span className="font-bold text-lg">CYBERGEN</span>
             </div>
-            <p className="text-gray-600 mb-6 max-w-md">
+            <p className="text-muted-foreground mb-6 max-w-md">
               AI-powered document intelligence platform for enterprises. Process, analyze, and extract insights from any document.
             </p>
             <div className="flex gap-4">
@@ -68,7 +68,7 @@ const Footer = () => {
                 <a 
                   key={i} 
                   href={social.href} 
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-muted hover:bg-cybergen-primary/10 hover:text-cybergen-primary transition-colors"
                 >
                   <social.icon className="h-4 w-4" />
                 </a>
@@ -78,13 +78,13 @@ const Footer = () => {
           
           {footerSections.map((section, i) => (
             <div key={i}>
-              <h3 className="font-semibold mb-4 text-gray-800">{section.title}</h3>
+              <h3 className="font-semibold mb-4">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, j) => (
                   <li key={j}>
                     <a 
                       href={link.href} 
-                      className="text-gray-600 hover:text-gray-900 transition-colors"
+                      className="text-muted-foreground hover:text-cybergen-primary transition-colors"
                     >
                       {link.name}
                     </a>
@@ -95,20 +95,20 @@ const Footer = () => {
           ))}
         </div>
         
-        <Separator className="my-8 bg-gray-100" />
+        <Separator className="my-8" />
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-muted-foreground">
             &copy; {year} CyberGen. All rights reserved.
           </div>
           <div className="flex gap-6">
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+            <a href="#" className="text-sm text-muted-foreground hover:text-cybergen-primary transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+            <a href="#" className="text-sm text-muted-foreground hover:text-cybergen-primary transition-colors">
               Terms of Service
             </a>
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+            <a href="#" className="text-sm text-muted-foreground hover:text-cybergen-primary transition-colors">
               Cookies
             </a>
           </div>

@@ -64,11 +64,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				cybergen: {
-					primary: '#333333', // Change to dark gray
-					secondary: '#555555', // Change to medium gray
-					accent: '#007BFF', // Change to blue for accents
-					light: '#F8F9FA', // Very light gray/almost white for backgrounds
-					dark: '#212529', // Dark gray for text
+					primary: '#00A0D6', // CyberGen blue from logo
+					secondary: '#005B8C', // Darker blue
+					accent: '#FF6B00', // Orange accent like in the example
+					light: '#E6F7FF', // Light blue for backgrounds
+					dark: '#0A2533', // Dark blue for text
 					gray: '#F0F4F8', // Light gray for sections
 				}
 			},
