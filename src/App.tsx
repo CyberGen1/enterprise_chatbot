@@ -7,24 +7,27 @@ import Index from "./pages/Index";
 import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 import ChatAssistantButton from "./components/ChatAssistantButton";
+import GradientThemeProvider from "./lib/gradient-theme";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/chat" element={<ChatPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      <ChatAssistantButton />
-    </TooltipProvider>
+    <GradientThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/chat" element={<ChatPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <ChatAssistantButton />
+      </TooltipProvider>
+    </GradientThemeProvider>
   </QueryClientProvider>
 );
 
