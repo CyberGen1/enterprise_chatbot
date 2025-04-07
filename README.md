@@ -1,6 +1,6 @@
 # Enterprise Chatbot
 
-A modern, responsive chatbot application built with React, TypeScript, and FastAPI. This application provides a beautiful UI for interacting with an AI-powered chatbot that can be integrated with various backend services.
+A modern, responsive chatbot application built with React, TypeScript, and connected to a FastAPI backend. This application provides a beautiful UI for interacting with an AI-powered chatbot.
 
 ![Enterprise Chatbot Screenshot](screenshot.png)
 
@@ -25,15 +25,10 @@ A modern, responsive chatbot application built with React, TypeScript, and FastA
 - Shadcn UI
 - Lucide React Icons
 
-### Backend
-- FastAPI
-- Python 3.9+
-
 ## Prerequisites
 
 - Node.js 16+ and npm
-- Python 3.9+
-- Docker and Docker Compose (for containerized deployment)
+- Docker (for containerized deployment)
 
 ## Getting Started
 
@@ -52,7 +47,7 @@ A modern, responsive chatbot application built with React, TypeScript, and FastA
 
 3. Create a `.env` file in the root directory:
    ```
-   VITE_API_URL=http://localhost:8080
+   VITE_API_URL=http://10.229.220.15:8080
    ```
 
 4. Start the development server:
@@ -61,24 +56,6 @@ A modern, responsive chatbot application built with React, TypeScript, and FastA
    ```
 
 5. The application will be available at `http://localhost:3000`
-
-### Backend Setup
-
-1. Create a Python virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-2. Install backend dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Start the FastAPI server:
-   ```bash
-   uvicorn main:app --host 0.0.0.0 --port 8080 --reload
-   ```
 
 ## Docker Deployment
 
@@ -109,54 +86,6 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-### Backend Dockerfile
-
-Create a `Dockerfile.backend` in the root directory:
-
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
-```
-
-### Docker Compose
-
-Create a `docker-compose.yml` file:
-
-```yaml
-version: '3.8'
-
-services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    environment:
-      - VITE_API_URL=http://backend:8080
-    depends_on:
-      - backend
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    ports:
-      - "8080:8080"
-    environment:
-      - ENVIRONMENT=production
-```
-
 ### Nginx Configuration
 
 Create an `nginx.conf` file:
@@ -172,8 +101,9 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
+    # Proxy API requests to the existing backend
     location /api {
-        proxy_pass http://backend:8080;
+        proxy_pass http://10.229.220.15:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
@@ -182,16 +112,15 @@ server {
 
 ## Deployment
 
-### Using Docker Compose
+### Using Docker
 
-1. Build and start the containers:
+1. Build and run the frontend container:
    ```bash
-   docker-compose up -d --build
+   docker build -t enterprise-chatbot-frontend .
+   docker run -d -p 80:80 enterprise-chatbot-frontend
    ```
 
-2. The application will be available at:
-   - Frontend: `http://your-server-ip`
-   - Backend API: `http://your-server-ip:8080`
+2. The application will be available at `http://your-server-ip`
 
 ### Manual Deployment
 
@@ -200,25 +129,14 @@ server {
    npm run build
    ```
 
-2. Deploy the `dist` folder to your web server
+2. Deploy the `dist` folder to your web server (Nginx, Apache, etc.)
 
-3. Deploy the backend to your server:
-   ```bash
-   # Install dependencies
-   pip install -r requirements.txt
-   
-   # Start the server (using gunicorn for production)
-   gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8080
-   ```
+3. Configure your web server to serve the static files and proxy API requests to the existing backend at `http://10.229.220.15:8080`
 
 ## Environment Variables
 
 ### Frontend
-- `VITE_API_URL`: Backend API URL
-
-### Backend
-- `ENVIRONMENT`: Production/Development environment
-- `API_KEY`: API key for external services (if needed)
+- `VITE_API_URL`: Backend API URL (should be set to `http://10.229.220.15:8080` or your API domain)
 
 ## Contributing
 
