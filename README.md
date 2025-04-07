@@ -81,7 +81,7 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["nginx", "-g", "daemon off;"]
 ```
@@ -92,7 +92,7 @@ Create an `nginx.conf` file:
 
 ```nginx
 server {
-    listen 80;
+    listen 3000;
     server_name localhost;
 
     location / {
@@ -117,10 +117,10 @@ server {
 1. Build and run the frontend container:
    ```bash
    docker build -t enterprise-chatbot-frontend .
-   docker run -d -p 80:80 enterprise-chatbot-frontend
+   docker run -d -p 3000:3000 enterprise-chatbot-frontend
    ```
 
-2. The application will be available at `http://your-server-ip`
+2. The application will be available at `http://your-server-ip:3000`
 
 ### Manual Deployment
 
