@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, FileText, BarChart3, Database, Paperclip, Send, RefreshCw, Maximize2, Minus, Sparkles, Bot } from 'lucide-react';
+import { MessageSquare, X, FileText, BarChart3, Database, Paperclip, Send, RefreshCw, Maximize2, Minus, Sparkles, Bot, Loader2 } from 'lucide-react';
 import { Button } from './ui/button'; // Assuming shadcn/ui button
 import { Card, CardContent, CardHeader, CardFooter } from './ui/card'; // Assuming shadcn/ui card components
 import { motion, AnimatePresence } from 'framer-motion';
@@ -47,6 +47,7 @@ const ChatAssistantButton = () => {
   const [message, setMessage] = useState('');
   const [useKnowledgeBase, setUseKnowledgeBase] = useState(false);
   const [chatHistory, setChatHistory] = useState<Array<{ type: 'user' | 'bot'; text: string }>>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
@@ -109,20 +110,47 @@ const ChatAssistantButton = () => {
   };
 
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const trimmedMessage = message.trim();
     if (trimmedMessage === '') return;
 
+    // Add user message to chat history
     setChatHistory(prev => [...prev, { type: 'user', text: trimmedMessage }]);
     setMessage('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const botResponse = useKnowledgeBase
-        ? `Using the knowledge base: I found relevant information in your documents regarding "${trimmedMessage.substring(0, 20)}...".`
-        : `Standard response: Processing your query about "${trimmedMessage.substring(0, 20)}...".`;
+    try {
+      // Make API call to FastAPI backend
+      const response = await fetch('http://10.229.220.15:8080/generate-response/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: trimmedMessage }),
+      });
 
-      setChatHistory(prev => [...prev, { type: 'bot', text: botResponse }]);
-    }, 800);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Extract the response text from the data object
+      // Check if data is a string or an object with a response property
+      const responseText = typeof data === 'string' ? data : data.response || JSON.stringify(data);
+      
+      // Add bot response to chat history
+      setChatHistory(prev => [...prev, { type: 'bot', text: responseText }]);
+    } catch (error) {
+      console.error('Error fetching response:', error);
+      // Add error message to chat history
+      setChatHistory(prev => [...prev, { 
+        type: 'bot', 
+        text: 'Sorry, I encountered an error while processing your request. Please try again later.' 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -251,6 +279,7 @@ const ChatAssistantButton = () => {
                     onKeyDown={handleKeyDown}
                     placeholder="Ask anything..."
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10" // Use ring-blue-400
+                    disabled={isLoading}
                   />
                 </div>
                  <Button
@@ -260,7 +289,7 @@ const ChatAssistantButton = () => {
                     className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                     aria-label="Reset chat"
                     title="Reset chat"
-                    disabled={chatHistory.length === 0 && message === ''}
+                    disabled={chatHistory.length === 0 && message === '' || isLoading}
                   >
                     <RefreshCw className="h-4 w-4" />
                   </Button>
@@ -269,9 +298,13 @@ const ChatAssistantButton = () => {
                   onClick={sendMessage}
                   className="h-8 w-8 rounded-full blue-gradient text-white flex-shrink-0 hover:shadow-md disabled:opacity-50" // Use blue-gradient and text-white
                   aria-label="Send message"
-                  disabled={message.trim() === ''}
+                  disabled={message.trim() === '' || isLoading}
                 >
-                  <Send className="h-4 w-4" />
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </CardFooter>
