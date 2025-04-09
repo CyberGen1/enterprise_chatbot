@@ -1,6 +1,6 @@
 # Enterprise Chatbot
 
-A modern, responsive chatbot application built with React, TypeScript, and connected to a FastAPI backend. This application provides a beautiful UI for interacting with an AI-powered chatbot.
+A modern, responsive chatbot application built with React, TypeScript, and connected to a FastAPI backend. This application provides a beautiful UI for interacting with an AI-powered chatbot that supports both regular conversations and advanced CSV data analysis powered by PandasAI.
 
 ![Enterprise Chatbot Screenshot](screenshot.png)
 
@@ -8,6 +8,8 @@ A modern, responsive chatbot application built with React, TypeScript, and conne
 
 - 🎨 Modern, responsive UI with gradient themes
 - 💬 Real-time chat interface with typing indicators
+- 📊 CSV data analysis with PandasAI
+- 📈 Interactive data visualizations
 - 🔄 Knowledge base integration
 - 📱 Mobile-friendly design
 - 🌙 Dark mode support
@@ -25,9 +27,16 @@ A modern, responsive chatbot application built with React, TypeScript, and conne
 - Shadcn UI
 - Lucide React Icons
 
+### Backend
+- FastAPI
+- PandasAI
+- Pandas
+- Python 3.9+
+
 ## Prerequisites
 
 - Node.js 16+ and npm
+- Python 3.9+ (for backend)
 - Docker (for containerized deployment)
 
 ## Getting Started
@@ -56,6 +65,27 @@ A modern, responsive chatbot application built with React, TypeScript, and conne
    ```
 
 5. The application will be available at `http://localhost:3000`
+
+### Backend Setup (Optional)
+
+If you want to run the backend locally:
+
+1. Install backend dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Create a `.env` file with your PandasAI API key:
+   ```
+   PANDAS_AI_API_KEY=your-pandasai-api-key
+   ```
+
+3. Start the FastAPI server:
+   ```bash
+   python app.py
+   ```
+
+   The backend will be available at `http://localhost:8080`
 
 ## Docker Deployment
 
@@ -138,6 +168,26 @@ server {
 ### Frontend
 - `VITE_API_URL`: Backend API URL (should be set to `http://10.229.220.15:8080` or your API domain)
 
+### Backend
+- `PANDAS_AI_API_KEY`: Your PandasAI API key (get it from https://app.pandabi.ai)
+
+## Using the Chatbot
+
+The chatbot supports two main modes:
+
+1. **Regular Chat Mode**
+   - Ask general questions or chat with the AI assistant
+
+2. **CSV Analysis Mode**
+   - Upload a CSV file by clicking the paperclip icon
+   - Once uploaded, the chatbot will display basic information about your file
+   - You can then ask questions about the data, such as:
+     - "What are the top 5 countries by sales?"
+     - "Show me a bar chart of revenue by country"
+     - "What's the average value in the second column?"
+     - "Find outliers in the data"
+     - "Show the correlation between column A and column B"
+
 ## Contributing
 
 1. Fork the repository
@@ -155,3 +205,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Shadcn UI](https://ui.shadcn.com/) for the beautiful UI components
 - [Lucide](https://lucide.dev/) for the icons
 - [Framer Motion](https://www.framer.com/motion/) for animations
+- [PandasAI](https://github.com/gventuri/pandas-ai) for CSV analysis capabilities
