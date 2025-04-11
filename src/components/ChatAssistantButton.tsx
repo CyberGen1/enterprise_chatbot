@@ -429,128 +429,156 @@ const ChatAssistantButton = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    // Upload file to backend
-    const uploadEndpoint = isPDF ? `${API_BASE_URL}/upload-pdf/` : `${API_BASE_URL}/upload-csv/`;
-    
-    try {
-      const response = await fetch(uploadEndpoint, {
-        method: 'POST',
-        body: formData,
-        // Add CORS mode to handle API requests
-        mode: 'cors',
-        headers: {
-          // Don't set Content-Type when using FormData, browser will set it with boundary
-          'Accept': 'application/json',
-        },
-        credentials: 'omit'
-      });
+    // Try direct API first, then fallback to proxy
+    let useDirectApi = true;
+    let attempts = 0;
+    const maxAttempts = 2; // Try direct and then proxy
+    let response = null;
+    let errorMessage = '';
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      // First check if we can parse as JSON
-      const text = await response.text();
-      let data;
+    while (attempts < maxAttempts && !response) {
       try {
-        // Try to parse as JSON
-        data = JSON.parse(text);
-      } catch (e) {
-        // If not JSON, return the text directly
-        data = text;
+        // Determine which endpoint to use based on current attempt
+        const baseUrl = useDirectApi ? ORIGINAL_API_URL : API_BASE_URL;
+        const uploadEndpoint = isPDF ? `${baseUrl}/upload-pdf/` : `${baseUrl}/upload-csv/`;
+        
+        console.log(`Attempting ${useDirectApi ? 'direct' : 'proxied'} file upload to: ${uploadEndpoint}`);
+        
+        // Try to upload file
+        response = await fetch(uploadEndpoint, {
+          method: 'POST',
+          body: formData,
+          mode: 'cors',
+          headers: {
+            // Don't set Content-Type when using FormData, browser will set it with boundary
+            'Accept': 'application/json',
+          },
+          credentials: 'omit'
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
+        // We got a successful response, break the loop
+        break;
+      } catch (error) {
+        console.error(`Error in upload attempt ${attempts + 1}:`, error);
+        errorMessage = error instanceof Error ? error.message : String(error);
+        
+        // If this was the direct API attempt, switch to proxy for next attempt
+        if (useDirectApi) {
+          console.log("Direct API upload failed. Switching to proxy...");
+          useDirectApi = false;
+        }
+        
+        // Increment attempts counter
+        attempts++;
+        
+        // If all attempts failed, response will remain null
+        if (attempts >= maxAttempts) {
+          response = null;
+        }
       }
-      
-      // Handle the response differently based on file type
-      if (isPDF) {
-        // For PDF files
-        let responseText;
-        
-        // Check if the response is an object with a message property (from FastAPI)
-        if (data && typeof data === 'object' && data.message) {
-          responseText = `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.\n\n**Server response:** ${data.message}`;
-        } else {
-          responseText = typeof data === 'string' 
-            ? data 
-            : `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.`;
+    }
+
+    // If we have a response, process it
+    if (response) {
+      try {
+        // First check if we can parse as JSON
+        const text = await response.text();
+        let data;
+        try {
+          // Try to parse as JSON
+          data = JSON.parse(text);
+        } catch (e) {
+          // If not JSON, use text directly
+          data = text;
         }
         
-        setChatHistory(prev => [...prev, { 
-          type: 'bot', 
-          text: responseText,
-          fileInfo: {
-            filename: file.name,
-            fileType: 'PDF'
-          }
-        }]);
-        
-        // No file ID concept for PDFs in this implementation
-        setActiveFileId(null);
-      } else {
-        // For CSV files (keeping existing functionality)
-        setActiveFileId(data.file_id);
-        
-        // Format columns to be more readable
-        let columnsList = '';
-        if (data.columns && data.columns.length > 0) {
-          columnsList = '\n\n**Columns:**\n\n';
-          columnsList += '| # | Column Name |\n';
-          columnsList += '|---|-------------|\n';
-          data.columns.forEach((col: string, index: number) => {
-            columnsList += `| ${index + 1} | ${col} |\n`;
-          });
-        }
-        
-        // Format preview data if available
-        let previewTable = '';
-        if (data.preview && data.preview.length > 0) {
-          previewTable = '\n\n**Data Preview:**\n\n';
-          previewTable += '| ' + data.columns.join(' | ') + ' |\n';
-          previewTable += '| ' + data.columns.map(() => '---').join(' | ') + ' |\n';
+        // Handle the response differently based on file type
+        if (isPDF) {
+          // For PDF files
+          let responseText;
           
-          data.preview.forEach((row: any) => {
-            previewTable += '| ' + data.columns.map((col: string) => row[col] || '').join(' | ') + ' |\n';
-          });
+          // Check if the response is an object with a message property (from FastAPI)
+          if (data && typeof data === 'object' && data.message) {
+            responseText = `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.\n\n**Server response:** ${data.message}`;
+          } else {
+            responseText = typeof data === 'string' 
+              ? data 
+              : `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.`;
+          }
+          
+          setChatHistory(prev => [...prev, { 
+            type: 'bot', 
+            text: responseText,
+            fileInfo: {
+              filename: file.name,
+              fileType: 'PDF'
+            }
+          }]);
+          
+          // No file ID concept for PDFs in this implementation
+          setActiveFileId(null);
+        } else {
+          // For CSV files (keeping existing functionality)
+          setActiveFileId(data.file_id);
+          
+          // Format columns to be more readable
+          let columnsList = '';
+          if (data.columns && data.columns.length > 0) {
+            columnsList = '\n\n**Columns:**\n\n';
+            columnsList += '| # | Column Name |\n';
+            columnsList += '|---|-------------|\n';
+            data.columns.forEach((col: string, index: number) => {
+              columnsList += `| ${index + 1} | ${col} |\n`;
+            });
+          }
+          
+          // Format preview data if available
+          let previewTable = '';
+          if (data.preview && data.preview.length > 0) {
+            previewTable = '\n\n**Data Preview:**\n\n';
+            previewTable += '| ' + data.columns.join(' | ') + ' |\n';
+            previewTable += '| ' + data.columns.map(() => '---').join(' | ') + ' |\n';
+            
+            data.preview.forEach((row: any) => {
+              previewTable += '| ' + data.columns.map((col: string) => row[col] || '').join(' | ') + ' |\n';
+            });
+          }
+          
+          // Add response to chat history
+          setChatHistory(prev => [...prev, { 
+            type: 'bot', 
+            text: `## CSV File Loaded Successfully\n\nI've loaded your CSV file **${data.filename}** with ${data.rows} rows and ${data.columns.length} columns. You can now ask questions about this data.${columnsList}${previewTable}\n\nTry asking questions like:\n- What's the distribution of values in column X?\n- Show me a chart of column Y vs column Z\n- What are the top 5 values in column A?`,
+            fileId: data.file_id,
+            fileInfo: {
+              filename: data.filename,
+              fileType: 'CSV',
+              columns: data.columns,
+              rows: data.rows
+            }
+          }]);
         }
-        
-        // Add response to chat history
+      } catch (processError) {
+        console.error('Error processing response:', processError);
         setChatHistory(prev => [...prev, { 
           type: 'bot', 
-          text: `## CSV File Loaded Successfully\n\nI've loaded your CSV file **${data.filename}** with ${data.rows} rows and ${data.columns.length} columns. You can now ask questions about this data.${columnsList}${previewTable}\n\nTry asking questions like:\n- What's the distribution of values in column X?\n- Show me a chart of column Y vs column Z\n- What are the top 5 values in column A?`,
-          fileId: data.file_id,
-          fileInfo: {
-            filename: data.filename,
-            fileType: 'CSV',
-            columns: data.columns,
-            rows: data.rows
-          }
+          text: `## Error\n\nI received a response from the server but couldn't process it.\n\n**Details:** ${processError instanceof Error ? processError.message : String(processError)}`
         }]);
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      
-      // Format error message based on the type of error
-      let errorDetail = 'Unknown error occurred';
-      
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-        // Network or CORS error
-        errorDetail = 'CORS Error: The server might be blocking cross-origin requests. ' +
-                      'This happens when the API server is not configured to accept requests from your current domain. ' +
-                      'Try accessing the application from the same domain as the API server.';
-      } else if (error instanceof Error) {
-        errorDetail = error.message;
-      } else {
-        errorDetail = String(error);
-      }
-      
+    } else {
+      // All attempts failed - show error message
       setChatHistory(prev => [...prev, { 
         type: 'bot', 
-        text: `## Error\n\nI encountered an error while processing your file. Please try again with a different file.\n\n**Details:** ${errorDetail}`
+        text: `## Error\n\nI encountered an error while processing your file. Please try again with a different file.\n\n**Details:** ${errorMessage || 'Failed to upload file after multiple attempts. This may be due to CORS restrictions or network issues.'}`
       }]);
-    } finally {
-      setIsLoading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';  // Reset the file input
-      }
+    }
+    
+    setIsLoading(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';  // Reset the file input
     }
   };
 
