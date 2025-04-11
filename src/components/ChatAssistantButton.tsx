@@ -322,13 +322,14 @@ const ChatAssistantButton = () => {
     const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
     
     if (isDevelopment) {
-      // Use a different CORS proxy since corsproxy.io is failing
-      // Try thingproxy as an alternative
-      return `https://thingproxy.freeboard.io/fetch/${url}`;
+      // ThingProxy is failing with 500 errors, try direct connection instead
+      // If direct connection works, no proxy is needed
+      return url;
       
-      // Alternative options if the above doesn't work:
+      // Alternative options if direct connection doesn't work:
       // return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-      // return `https://crossorigin.me/${url}`;
+      // return `https://cors-anywhere.herokuapp.com/${url}`;
+      // return `https://proxy.cors.sh/${url}`;
     }
     
     // In production, use the direct URL (assuming same-origin or proper CORS setup)
@@ -389,9 +390,20 @@ const ChatAssistantButton = () => {
   };
 
   const resetChat = () => {
+    // Check if there's any PDF document in the chat history
+    const hasPdfDocument = chatHistory.some(
+      msg => msg.fileInfo?.fileType === 'PDF'
+    );
+    
+    // Clear chat history
     setChatHistory([]);
     setMessage('');
-    setUseKnowledgeBase(false);
+    
+    // Only reset knowledge base if there's no PDF document
+    if (!hasPdfDocument) {
+      setUseKnowledgeBase(false);
+    }
+    
     setActiveFileId(null);
     inputRef.current?.focus();
   };
@@ -417,6 +429,33 @@ const ChatAssistantButton = () => {
       return;
     }
 
+    // Validate file size before upload - prevent server errors for large files
+    const maxSizeMB = isPDF ? 5 : 10; // 5MB for PDFs, 10MB for CSVs
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    
+    if (file.size > maxSizeBytes) {
+      setChatHistory(prev => [...prev, { 
+        type: 'bot', 
+        text: `File too large. Maximum size for ${isPDF ? 'PDF' : 'CSV'} files is ${maxSizeMB}MB. Your file is ${(file.size / (1024 * 1024)).toFixed(2)}MB.`
+      }]);
+      return;
+    }
+
+    // Additional PDF validation - check PDF format
+    if (isPDF) {
+      // Simple PDF header check
+      const firstBytes = await readFileHeader(file, 5);
+      const isPDFFormat = firstBytes === '%PDF-';
+      
+      if (!isPDFFormat) {
+        setChatHistory(prev => [...prev, { 
+          type: 'bot', 
+          text: `The file ${file.name} doesn't appear to be a valid PDF document. Make sure your file is not corrupted.`
+        }]);
+        return;
+      }
+    }
+
     // Add file to chat history
     setChatHistory(prev => [...prev, { 
       type: 'user', 
@@ -436,50 +475,61 @@ const ChatAssistantButton = () => {
     let response = null;
     let errorMessage = '';
 
-    while (attempts < maxAttempts && !response) {
-      try {
-        // Determine which endpoint to use based on current attempt
-        const baseUrl = useDirectApi ? ORIGINAL_API_URL : API_BASE_URL;
-        const uploadEndpoint = isPDF ? `${baseUrl}/upload-pdf/` : `${baseUrl}/upload-csv/`;
-        
-        console.log(`Attempting ${useDirectApi ? 'direct' : 'proxied'} file upload to: ${uploadEndpoint}`);
-        
-        // Try to upload file
-        response = await fetch(uploadEndpoint, {
-          method: 'POST',
-          body: formData,
-          mode: 'cors',
-          headers: {
-            // Don't set Content-Type when using FormData, browser will set it with boundary
-            'Accept': 'application/json',
-          },
-          credentials: 'omit'
-        });
+    try {
+      // Direct API approach since proxies are failing
+      const uploadEndpoint = isPDF ? `${ORIGINAL_API_URL}/upload-pdf/` : `${ORIGINAL_API_URL}/upload-csv/`;
+      
+      console.log(`Uploading file directly to: ${uploadEndpoint}`);
+      
+      // Try to upload file with improved headers
+      response = await fetch(uploadEndpoint, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors',
+        headers: {
+          // Don't set Content-Type when using FormData, browser will set it with boundary
+          'Accept': 'application/json',
+          'Origin': window.location.origin,
+        },
+        credentials: 'omit'
+      });
 
-        if (!response.ok) {
+      if (!response.ok) {
+        // Special handling for 500 Internal Server Error
+        if (response.status === 500) {
+          if (isPDF) {
+            throw new Error("Server error: The PDF document might be too complex, password-protected, or in an unsupported format.");
+          } else {
+            throw new Error(`API error: ${response.status} - Server failed to process the file.`);
+          }
+        } else {
           throw new Error(`API error: ${response.status}`);
         }
-        
-        // We got a successful response, break the loop
-        break;
-      } catch (error) {
-        console.error(`Error in upload attempt ${attempts + 1}:`, error);
-        errorMessage = error instanceof Error ? error.message : String(error);
-        
-        // If this was the direct API attempt, switch to proxy for next attempt
-        if (useDirectApi) {
-          console.log("Direct API upload failed. Switching to proxy...");
-          useDirectApi = false;
-        }
-        
-        // Increment attempts counter
-        attempts++;
-        
-        // If all attempts failed, response will remain null
-        if (attempts >= maxAttempts) {
-          response = null;
-        }
       }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      errorMessage = error instanceof Error ? error.message : String(error);
+      response = null;
+    }
+
+    // Helper function to read first few bytes of a file
+    async function readFileHeader(file: File, bytesToRead: number): Promise<string> {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+          if (e.target?.result) {
+            const arr = new Uint8Array(e.target.result as ArrayBuffer);
+            let result = '';
+            for (let i = 0; i < Math.min(bytesToRead, arr.length); i++) {
+              result += String.fromCharCode(arr[i]);
+            }
+            resolve(result);
+          } else {
+            resolve('');
+          }
+        };
+        reader.readAsArrayBuffer(file.slice(0, bytesToRead));
+      });
     }
 
     // If we have a response, process it
@@ -503,12 +553,15 @@ const ChatAssistantButton = () => {
           
           // Check if the response is an object with a message property (from FastAPI)
           if (data && typeof data === 'object' && data.message) {
-            responseText = `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.\n\n**Server response:** ${data.message}`;
+            responseText = `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.\n\n**Server response:** ${data.message}\n\n**Note:** Knowledge Base has been automatically activated to answer questions about this document.`;
           } else {
             responseText = typeof data === 'string' 
               ? data 
-              : `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.`;
+              : `## PDF Document Loaded Successfully\n\nI've loaded your PDF document **${file.name}**. You can now ask questions about this document.\n\n**Note:** Knowledge Base has been automatically activated to answer questions about this document.`;
           }
+          
+          // Automatically activate knowledge base when PDF is uploaded
+          setUseKnowledgeBase(true);
           
           setChatHistory(prev => [...prev, { 
             type: 'bot', 
@@ -610,20 +663,24 @@ const ChatAssistantButton = () => {
       kb_flag: useKnowledgeBase
     });
 
+    // Add debug logging to show if knowledge base is being used
+    console.log(`Sending query with knowledge base flag: ${useKnowledgeBase ? 'ON' : 'OFF'}`);
+    console.log('Request details:', { query: trimmedMessage, kb_flag: useKnowledgeBase });
+
     try {
       // Try direct call first without proxy
       const apiEndpoint = `${ORIGINAL_API_URL}/generate-response/`;
       console.log(`Attempting direct API call to: ${apiEndpoint}`);
       
-      // Try an alternate approach to make the request work
+      // Use a more complete set of headers to handle CORS properly
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Origin': window.location.origin,
         },
         body: requestBody,
-        // Use no-cors mode as a last resort
         mode: 'cors'
       });
 
@@ -661,16 +718,16 @@ const ChatAssistantButton = () => {
     } catch (error) {
       console.error('Error fetching response:', error);
       
-      // Try the proxied URL as fallback if the direct connection failed
+      // Try a fallback approach with different headers
       try {
-        console.log("Direct API call failed. Attempting with proxy...");
-        const proxiedEndpoint = `${API_BASE_URL}/generate-response/`;
+        console.log("Direct API call failed. Attempting with alternative headers...");
         
-        const fallbackResponse = await fetch(proxiedEndpoint, {
+        const fallbackResponse = await fetch(`${ORIGINAL_API_URL}/generate-response/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': '*/*',
+            'Connection': 'keep-alive',
           },
           body: requestBody,
           mode: 'cors'
@@ -706,7 +763,7 @@ const ChatAssistantButton = () => {
         // Exit early since we successfully used the fallback
         return;
       } catch (fallbackError) {
-        console.error('Fallback proxy also failed:', fallbackError);
+        console.error('Fallback approach also failed:', fallbackError);
         // Continue to the error handling below
       }
       
