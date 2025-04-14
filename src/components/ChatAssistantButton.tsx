@@ -352,6 +352,41 @@ const ChatAssistantButton = () => {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, [isMaximized]);
 
+  // Listen for document selection messages from DocumentSidebar
+  useEffect(() => {
+    const handleDocumentSelection = (event: MessageEvent) => {
+      if (
+        event.origin === window.location.origin && 
+        event.data?.type === 'SELECT_DOCUMENT' &&
+        event.data?.payload?.documentName
+      ) {
+        const documentName = event.data.payload.documentName;
+        
+        // Activate knowledge base
+        setUseKnowledgeBase(true);
+        
+        // Add a message about the selected document
+        setChatHistory(prev => [...prev, { 
+          type: 'user', 
+          text: `I want to discuss the document: ${documentName}` 
+        }]);
+        
+        // Add bot response
+        setChatHistory(prev => [...prev, { 
+          type: 'bot', 
+          text: `I've loaded the document **${documentName}**. The Knowledge Base is now active. What would you like to know about this document?`,
+          fileInfo: {
+            filename: documentName,
+            fileType: 'PDF'
+          }
+        }]);
+      }
+    };
+    
+    window.addEventListener('message', handleDocumentSelection);
+    return () => window.removeEventListener('message', handleDocumentSelection);
+  }, []);
+
   // Show a log message about the API URL being used (helpful for debugging)
   useEffect(() => {
     const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
@@ -406,6 +441,55 @@ const ChatAssistantButton = () => {
     
     setActiveFileId(null);
     inputRef.current?.focus();
+
+    // If there are documents, ask the user to confirm deletion
+    if (hasPdfDocument) {
+      const confirmDeletion = window.confirm(
+        "Do you want to delete all uploaded documents? This action cannot be undone."
+      );
+      
+      if (confirmDeletion) {
+        deleteAllFiles();
+      }
+    }
+  };
+
+  // Function to delete all files from the backend
+  const deleteAllFiles = async () => {
+    try {
+      const response = await fetch(`${ORIGINAL_API_URL}/delete-all-files/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': window.location.origin,
+        },
+        mode: 'cors'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete files: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Show success message
+      setChatHistory(prev => [...prev, { 
+        type: 'bot', 
+        text: `All documents have been successfully deleted.\n\n**Server response:** ${data.message}` 
+      }]);
+      
+      // Reset knowledge base after deletion
+      setUseKnowledgeBase(false);
+      
+    } catch (error) {
+      console.error('Error deleting files:', error);
+      
+      setChatHistory(prev => [...prev, { 
+        type: 'bot', 
+        text: `## Error\n\nFailed to delete documents.\n\n**Details:** ${error instanceof Error ? error.message : String(error)}` 
+      }]);
+    }
   };
 
   const toggleKnowledgeBase = () => {
@@ -749,8 +833,8 @@ const ChatAssistantButton = () => {
             loadingIndicator: false
           }
         ]);
-        
-        setTimeout(() => {
+
+    setTimeout(() => {
           setChatHistory(prev => [
             ...prev.slice(0, placeholderIndex),
             {
