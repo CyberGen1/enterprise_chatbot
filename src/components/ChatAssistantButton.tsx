@@ -891,6 +891,11 @@ const ChatAssistantButton = () => {
   const chatWindowDesktopMaximized = "bottom-6 right-6 w-[700px] h-[80vh] max-w-[95vw] max-h-[90vh]";
   const chatWindowDesktopClasses = isMaximized ? chatWindowDesktopMaximized : chatWindowDesktopBase;
 
+  // Add debug logs
+  React.useEffect(() => {
+    console.log("ChatAssistantButton - isOpen changed:", isOpen);
+  }, [isOpen]);
+
   return (
     <>
       {/* Hidden file input */}
@@ -954,15 +959,27 @@ const ChatAssistantButton = () => {
                    <p className="mb-6 max-w-md text-sm text-muted-foreground">
                      Ask me anything, upload documents for analysis, or connect your data.
                    </p>
-                   <div className={`grid w-full max-w-md gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-3'}`}>
+                   <div className={`grid w-full max-w-md gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-2'}`}>
                     <WelcomeCard 
                       icon={FileText} 
                       title="CSV Analysis" 
                       description="Upload & analyze data." 
                       onClick={triggerFileUpload}
                     />
-                      <WelcomeCard icon={BarChart3} title="Analytics" description="Explore CSV, JSON data." />
-                      <WelcomeCard icon={Database} title="Knowledge" description="Chat with your files." />
+                    
+                    <WelcomeCard 
+                      icon={Database} 
+                      title="Knowledge Base" 
+                      description="Chat with your files."
+                      onClick={() => {
+                        toggleKnowledgeBase();
+                        // Add a helpful message about knowledge base activation
+                        setChatHistory(prev => [...prev, { 
+                          type: 'bot', 
+                          text: 'Knowledge Base has been activated. You can now ask questions about your uploaded documents. If you haven\'t uploaded any documents yet, you can do so using the paper clip icon in the chat input area.' 
+                        }]);
+                      }} 
+                    />
                    </div>
                 </motion.div>
               ) : (

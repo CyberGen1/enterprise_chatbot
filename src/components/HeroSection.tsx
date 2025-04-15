@@ -17,9 +17,26 @@ export const useChatAssistant = () => React.useContext(ChatAssistantContext);
 const HeroSection = () => {
   const { setIsOpen } = useChatAssistant();
 
+  // Open the chat assistant
   const handleStartChatting = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    console.log("Try the Assistant button clicked");
+    console.log("Current context value:", { setIsOpen });
     setIsOpen(true);
+    console.log("setIsOpen called with true");
+  };
+
+  // Scroll to the Enterprise Section
+  const handleLearnMore = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const enterpriseSection = document.getElementById('enterprise');
+    if (enterpriseSection) {
+      enterpriseSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   // Assume gradient-text class is defined globally or in your main CSS:
@@ -68,7 +85,8 @@ const HeroSection = () => {
               <Button
                 size="lg"
                 onClick={handleStartChatting}
-                className="shadow-lg shadow-primary/30 hover:shadow-primary/40 dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-shadow duration-300" // Use default variant, add refined shadow
+                data-testid="chat-assistant-button"
+                className="shadow-lg shadow-primary/30 hover:shadow-primary/40 dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-shadow duration-300 relative z-50" // Added z-index
               >
                 <Sparkles className="h-5 w-5 mr-2" /> {/* Different Icon */}
                 Try the Assistant
@@ -76,6 +94,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
+                onClick={handleLearnMore}
                 className="group dark:border-gray-700 dark:hover:border-blue-500 dark:text-gray-300"
               >
                 Learn More

@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Index from "./pages/Index";
 import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
@@ -14,7 +14,18 @@ import { ChatAssistantContext } from "./components/HeroSection";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpenOriginal] = useState(false);
+  
+  // Create a wrapped version of setIsOpen that logs when it's called
+  const setIsOpen = (value: boolean | ((prevState: boolean) => boolean)) => {
+    console.log("App - setIsOpen called with:", value);
+    setIsOpenOriginal(value);
+  };
+
+  // Add debug logs
+  useEffect(() => {
+    console.log("App - isOpen state changed:", isOpen);
+  }, [isOpen]);
 
   return (
     <QueryClientProvider client={queryClient}>
