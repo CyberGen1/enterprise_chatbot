@@ -1,11 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     container: {
@@ -16,10 +13,9 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['Work Sans', 'system-ui', 'sans-serif'],
-      },
       colors: {
+        'cybergen-primary': 'hsl(var(--cybergen-primary))',
+        'cybergen-secondary': 'hsl(var(--cybergen-secondary))',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,9 +49,6 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        "cybergen-primary": "#38bdf8",
-        "cybergen-primary-dark": "#1e40af",
-        "cybergen-secondary": "#0369a1",
         sidebar: {
           background: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -71,6 +64,9 @@ module.exports = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)'],
       },
       keyframes: {
         "accordion-down": {
@@ -108,5 +104,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require('@tailwindcss/typography')],
 } 

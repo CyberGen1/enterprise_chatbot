@@ -125,7 +125,7 @@ const DocumentSidebar = () => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl z-50 flex flex-col"
+            className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl z-50 flex flex-col"
           >
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-bold flex items-center">
@@ -148,7 +148,7 @@ const DocumentSidebar = () => {
                   <RefreshCw className="h-6 w-6 text-blue-500 animate-spin" />
                 </div>
               ) : error ? (
-                <div className="text-red-500 p-3 rounded-md bg-red-50 dark:bg-red-900/20">
+                <div className="text-red-500 p-3 rounded-md bg-red-50">
                   <p>Error loading documents: {error}</p>
                   <Button 
                     variant="outline" 
@@ -161,7 +161,7 @@ const DocumentSidebar = () => {
                   </Button>
                 </div>
               ) : documents.length === 0 ? (
-                <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+                <div className="text-center text-gray-500 py-8">
                   <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
                   <p>No documents found</p>
                   <p className="text-sm mt-2">Upload documents using the chat assistant</p>
@@ -171,18 +171,18 @@ const DocumentSidebar = () => {
                   {documents.map((doc) => (
                     <div 
                       key={doc}
-                      className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative group"
+                      className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors relative group"
                     >
                       <div className="flex items-start">
                         <FileText className="h-5 w-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <button 
                             onClick={() => openChatWithDocument(doc)}
-                            className="text-left font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 w-full truncate"
+                            className="text-left font-medium text-foreground hover:text-blue-600 w-full truncate"
                           >
                             {doc}
                           </button>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          <p className="text-xs text-gray-500 mt-1">
                             PDF Document
                           </p>
                         </div>
@@ -227,7 +227,7 @@ const DocumentSidebar = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 bg-black/20 dark:bg-black/50 z-40"
+          className="fixed inset-0 bg-black/20 z-40"
           onClick={toggleSidebar}
         />
       )}

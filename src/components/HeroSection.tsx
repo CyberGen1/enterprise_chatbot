@@ -50,9 +50,9 @@ const HeroSection = () => {
 
   return (
     <section className="relative isolate min-h-screen flex items-center overflow-hidden bg-background"> {/* Use bg-background, isolate for stacking */}
-      {/* Subtle Background Elements - Improved for dark mode */}
+      {/* Subtle Background Elements - Improved for light mode */}
       <div
-        className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-transparent bg-[radial-gradient(theme(colors.muted)_1px,transparent_1px)] dark:bg-[radial-gradient(theme(colors.muted)_1px,transparent_1px)] [background-size:20px_20px] opacity-30 dark:opacity-20"
+        className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(theme(colors.muted)_1px,transparent_1px)] [background-size:20px_20px] opacity-30"
         aria-hidden="true"
       />
       <div
@@ -60,7 +60,7 @@ const HeroSection = () => {
         aria-hidden="true"
       >
         <div
-          className="aspect-[1155/678] w-full bg-gradient-to-tr from-primary/10 via-primary/5 to-secondary/10 dark:from-primary/20 dark:via-primary/10 dark:to-secondary/20 opacity-50 dark:opacity-30"
+          className="aspect-[1155/678] w-full bg-gradient-to-tr from-primary/10 via-primary/5 to-secondary/10 opacity-50"
           style={{
             clipPath:
               'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
@@ -75,7 +75,7 @@ const HeroSection = () => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-8 leading-tight sm:leading-tight lg:leading-tight"> {/* Use foreground color, adjusted margin */}
               Unlock Insights with
               <br className="hidden lg:inline" />{' '} {/* Line break on large screens */}
-              <span className="gradient-text dark:text-blue-400">AI-Powered Conversations</span>
+              <span className="gradient-text text-blue-400">AI-Powered Conversations</span>
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0"> {/* Use muted-foreground, adjusted margin and max-width */}
               Engage with our cutting-edge AI assistant. Seamlessly analyze data, generate content, and find solutions through intuitive chat.
@@ -86,7 +86,7 @@ const HeroSection = () => {
                 size="lg"
                 onClick={handleStartChatting}
                 data-testid="chat-assistant-button"
-                className="shadow-lg shadow-primary/30 hover:shadow-primary/40 dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-shadow duration-300 relative z-50" // Added z-index
+                className="shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-shadow duration-300 relative z-50" // Added z-index
               >
                 <Sparkles className="h-5 w-5 mr-2" /> {/* Different Icon */}
                 Try the Assistant
@@ -95,7 +95,7 @@ const HeroSection = () => {
                 variant="outline" 
                 size="lg" 
                 onClick={handleLearnMore}
-                className="group dark:border-gray-700 dark:hover:border-blue-500 dark:text-gray-300"
+                className="group"
               >
                 Learn More
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
@@ -110,7 +110,7 @@ const HeroSection = () => {
                 <img
                   src="/ai-chat-illustration.jpg" // Replace with your actual image path
                   alt="AI Assistant Interface"
-                  className="w-full h-auto rounded-xl border border-blue-300 dark:border-blue-800 shadow-2xl shadow-blue-500/20 dark:shadow-blue-500/10 aspect-video object-cover dark:opacity-90 dark:brightness-90 dark:contrast-125" // Larger radius, neutral shadow, enforce aspect ratio
+                  className="w-full h-auto rounded-xl border border-blue-300 shadow-2xl shadow-blue-500/20 aspect-video object-cover" // Larger radius, neutral shadow, enforce aspect ratio
                   // Optional: Add loading="lazy" for performance
                 />
              {/* </div> */}

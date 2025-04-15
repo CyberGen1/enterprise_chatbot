@@ -9,7 +9,6 @@ import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import ChatAssistantButton from "./components/ChatAssistantButton";
-import GradientThemeProvider from "./lib/gradient-theme";
 import { ChatAssistantContext } from "./components/HeroSection";
 
 const queryClient = new QueryClient();
@@ -28,26 +27,32 @@ const App = () => {
     console.log("App - isOpen state changed:", isOpen);
   }, [isOpen]);
 
+  // Force light theme
+  useEffect(() => {
+    // Remove dark class if present
+    document.documentElement.classList.remove('dark');
+    // Set theme in localStorage
+    localStorage.setItem('theme', 'light');
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <GradientThemeProvider>
-        <TooltipProvider>
-          <ChatAssistantContext.Provider value={{ isOpen, setIsOpen }}>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/auth" element={<AuthPage />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-            <ChatAssistantButton />
-          </ChatAssistantContext.Provider>
-        </TooltipProvider>
-      </GradientThemeProvider>
+      <TooltipProvider>
+        <ChatAssistantContext.Provider value={{ isOpen, setIsOpen }}>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <ChatAssistantButton />
+        </ChatAssistantContext.Provider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 };

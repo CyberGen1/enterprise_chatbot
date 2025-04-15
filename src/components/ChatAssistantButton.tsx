@@ -30,7 +30,7 @@ type ChatMessageType = {
 // Styled markdown renderer component
 const FormattedMarkdown = ({ children }: { children: string }) => {
   return (
-    <div className="markdown-content prose dark:prose-invert prose-sm max-w-none overflow-hidden">
+    <div className="markdown-content prose prose-sm max-w-none overflow-hidden">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
@@ -64,7 +64,7 @@ const FormattedMarkdown = ({ children }: { children: string }) => {
                 {String(children).replace(/\n$/, '')}
               </SyntaxHighlighter>
             ) : (
-              <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded" {...props}>
+              <code className="bg-gray-100 px-1.5 py-0.5 rounded" {...props}>
                 {children}
               </code>
             );
@@ -92,25 +92,25 @@ const FormattedMarkdown = ({ children }: { children: string }) => {
           },
           table({ node, ...props }) {
             return (
-              <div className="overflow-x-auto custom-scrollbar my-3 border border-gray-200 dark:border-gray-700 rounded-md">
+              <div className="overflow-x-auto custom-scrollbar my-3 border border-gray-200 rounded-md">
                 <table className="border-collapse min-w-full text-sm" {...props} />
               </div>
             );
           },
           thead({ node, ...props }) {
-            return <thead className="bg-gray-100 dark:bg-gray-800 sticky top-0" {...props} />;
+            return <thead className="bg-gray-100 sticky top-0" {...props} />;
           },
           tbody({ node, ...props }) {
-            return <tbody className="divide-y divide-gray-200 dark:divide-gray-700" {...props} />;
+            return <tbody className="divide-y divide-gray-200" {...props} />;
           },
           tr({ node, ...props }) {
-            return <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/30" {...props} />;
+            return <tr className="hover:bg-gray-50" {...props} />;
           },
           th({ node, ...props }) {
-            return <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300" {...props} />;
+            return <th className="px-3 py-2 text-left font-semibold text-gray-700" {...props} />;
           },
           td({ node, ...props }) {
-            return <td className="px-3 py-2 whitespace-normal break-words border-t border-gray-200 dark:border-gray-700" {...props} />;
+            return <td className="px-3 py-2 whitespace-normal break-words border-t border-gray-200" {...props} />;
           },
           a({ node, ...props }) {
             return <a className="text-blue-500 underline hover:text-blue-700" {...props} />;
@@ -200,20 +200,20 @@ const ChatMessage = ({ message }: { message: ChatMessageType }) => {
           'rounded-lg px-4 py-3 text-sm shadow-sm',
           isUser
             ? 'blue-gradient text-white rounded-br-none max-w-[75%]'
-            : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-bl-none max-w-[85%]'
+            : 'bg-white text-gray-800 rounded-bl-none max-w-[85%]'
         )}
       >
         <div className="space-y-2">
           {/* File upload info */}
           {message.fileInfo && (
-            <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-gray-700 rounded mb-3">
+            <div className="flex items-center gap-2 p-2 bg-blue-50 rounded mb-3">
               <Table className="h-5 w-5 text-blue-500" />
               <div>
-                <p className="font-semibold text-blue-700 dark:text-blue-300">{message.fileInfo.filename}</p>
+                <p className="font-semibold text-blue-700">{message.fileInfo.filename}</p>
                 {message.fileInfo.fileType === 'CSV' && message.fileInfo.rows !== undefined && message.fileInfo.columns !== undefined ? (
-                  <p className="text-xs text-gray-600 dark:text-gray-300">{message.fileInfo.rows} rows · {message.fileInfo.columns.length} columns</p>
+                  <p className="text-xs text-gray-600">{message.fileInfo.rows} rows · {message.fileInfo.columns.length} columns</p>
                 ) : (
-                  <p className="text-xs text-gray-600 dark:text-gray-300">{message.fileInfo.fileType} document</p>
+                  <p className="text-xs text-gray-600">{message.fileInfo.fileType} document</p>
                 )}
               </div>
             </div>
@@ -243,8 +243,8 @@ const ChatMessage = ({ message }: { message: ChatMessageType }) => {
           
           {/* Visualizations if available */}
           {visualizations.length > 0 && (
-            <div className="mt-3 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-3">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Visualization</h4>
+            <div className="mt-3 rounded-md overflow-hidden border border-gray-200 bg-white p-3">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Data Visualization</h4>
               
               {visualizations.length === 1 ? (
                 // Single visualization
@@ -261,7 +261,7 @@ const ChatMessage = ({ message }: { message: ChatMessageType }) => {
                 // Multiple visualizations
                 <div className={`grid ${visualizations.length === 2 ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2'} gap-4`}>
                   {visualizations.map((viz, index) => (
-                    <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-md p-2 visualization-item">
+                    <div key={index} className="border border-gray-200 rounded-md p-2 visualization-item">
                       <a href={viz} target="_blank" rel="noopener noreferrer">
                         <img 
                           src={viz} 
@@ -933,7 +933,7 @@ const ChatAssistantButton = () => {
             style={{ transformOrigin: 'bottom right' }}
           >
             {/* Header */}
-            <CardHeader className="flex flex-row items-center justify-between p-3 border-b bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 flex-shrink-0">
+            <CardHeader className="flex flex-row items-center justify-between p-3 border-b bg-gradient-to-r from-blue-50 to-blue-100 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full border items-center justify-center blue-gradient">
                   <Bot className="h-5 w-5 text-white"/>
@@ -967,7 +967,7 @@ const ChatAssistantButton = () => {
             </CardHeader>
 
             {/* Chat Body */}
-            <CardContent ref={chatBodyRef} className="flex-grow overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900">
+            <CardContent ref={chatBodyRef} className="flex-grow overflow-y-auto p-4 space-y-4 bg-gray-50">
               {chatHistory.length === 0 ? (
                 // Welcome Screen
                 <motion.div
@@ -1015,7 +1015,7 @@ const ChatAssistantButton = () => {
             </CardContent>
 
             {/* Footer / Input Area */}
-            <CardFooter className="p-3 border-t bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 flex-shrink-0">
+            <CardFooter className="p-3 border-t bg-gradient-to-r from-blue-50 to-blue-100 flex-shrink-0">
                 {useKnowledgeBase && (
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
