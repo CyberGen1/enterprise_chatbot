@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -68,7 +67,7 @@ const Header = () => {
               {item.name}
             </a>
           ))}
-          <Link to="/chat">
+          <Link to="/auth">
             <Button className="mt-4 bg-cybergen-primary hover:bg-cybergen-secondary w-full">
               Sign In
             </Button>
@@ -86,7 +85,7 @@ const Header = () => {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           {!isMobile && (
-            <Link to="/chat">
+            <Link to="/auth">
               <Button className="bg-cybergen-primary hover:bg-cybergen-secondary">
                 Sign In
               </Button>
