@@ -343,7 +343,9 @@ const ChatAssistantButton = () => {
     const checkIfMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (!mobile && isMaximized) {
+      // Only reset maximized state when going from desktop to mobile
+      // not every time this effect runs
+      if (mobile && isMaximized) {
         setIsMaximized(false);
       }
     };
@@ -418,7 +420,10 @@ const ChatAssistantButton = () => {
   }, [chatHistory]);
 
   const toggleChat = () => setIsOpen(!isOpen);
-  const toggleMaximize = () => setIsMaximized(!isMaximized);
+  const toggleMaximize = () => {
+    console.log("Maximize button clicked, current state:", isMaximized);
+    setIsMaximized(prevState => !prevState);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -896,6 +901,11 @@ const ChatAssistantButton = () => {
     console.log("ChatAssistantButton - isOpen changed:", isOpen);
   }, [isOpen]);
 
+  // Add debug log for isMaximized state
+  React.useEffect(() => {
+    console.log("ChatAssistantButton - isMaximized changed:", isMaximized);
+  }, [isMaximized]);
+
   return (
     <>
       {/* Hidden file input */}
@@ -932,13 +942,27 @@ const ChatAssistantButton = () => {
               </div>
               <div className="flex items-center gap-1">
                 {!isMobile && (
-                  <Button variant="ghost" size="icon" onClick={toggleMaximize} className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600" aria-label={isMaximized ? "Restore chat size" : "Maximize chat"}>
-                     {isMaximized ? <Minus className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleMaximize}
+                    className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600 cursor-pointer"
+                    aria-label={isMaximized ? "Restore chat size" : "Maximize chat"}
+                    type="button"
+                  >
+                    {isMaximized ? <Minus className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                   </Button>
                 )}
-                 <Button variant="ghost" size="icon" onClick={toggleChat} className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600" aria-label="Close chat">
-                    <X className="h-4 w-4" />
-                 </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleChat}
+                  className="h-7 w-7 text-muted-foreground hover:bg-blue-100 hover:text-blue-600"
+                  aria-label="Close chat"
+                  type="button"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
             </CardHeader>
 
