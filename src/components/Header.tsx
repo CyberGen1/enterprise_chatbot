@@ -22,13 +22,12 @@ const Header = () => {
   ];
 
   const Logo = () => (
-    <Link to="/" className="flex items-center gap-2">
+    <Link to="/" className="flex items-center">
       <img 
-        src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png" 
+        src="/cybergen-logo.png" 
         alt="Cybergen" 
-        className="h-10 w-auto"
+        className="h-[160px] w-auto"
       />
-      <span className="font-bold text-xl">CYBERGEN</span>
     </Link>
   );
 

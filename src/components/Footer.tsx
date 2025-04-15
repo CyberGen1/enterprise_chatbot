@@ -28,9 +28,9 @@ const Footer = () => {
         <div className="flex flex-col items-center text-center mb-6">
           <a href="https://www.cybergen.com" target="_blank" rel="noopener noreferrer" aria-label="Cybergen Home">
             <img
-              src="/lovable-uploads/e79b349f-9d4e-4ddd-bc6e-dfc271683c93.png"
+              src="/cybergen-logo.png"
               alt="Cybergen Logo"
-              className="h-8 w-auto mb-4"
+              className="h-[160px] w-auto mb-4"
             />
           </a>
           <p className="text-muted-foreground text-sm max-w-md">
